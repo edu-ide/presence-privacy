@@ -65,7 +65,7 @@
 <main>
   <header>
     <div class="brand"><span class="dot"></span><h1>Q Presence</h1></div>
-    <div class="updated">개인정보처리방침 · Privacy Policy — 최종 업데이트 / Last updated: 2026-08-21</div>
+    <div class="updated">개인정보처리방침 · Privacy Policy — 최종 업데이트 / Last updated: 2026-08-23</div>
     <nav><a href="#ko">한국어</a><a href="#en">English</a></nav>
   </header>
 
@@ -74,7 +74,7 @@
     <p class="lede">Q Presence는 <strong>콘텐츠에 중앙 서버가 없는</strong> 존재 기반 소셜 네트워크입니다. 다만 앱에는 성격이 완전히 다른 두 계층이 있고, 두 번째 계층에서는 개발자 서버가 일부 데이터를 받습니다. 이 문서는 그 경계를 정확히 구분합니다.</p>
     <ul>
       <li><strong>계층 1 — P2P 콘텐츠 계층 (서버 없음)</strong>: 글·사진·영상·대화·팔로우. 개발자 서버를 거치지 않습니다.</li>
-      <li><strong>계층 2 — 선택적 계정/relay 계층 (수집 있음)</strong>: 개발자가 운영하는 <code>auth.ugot.uk</code> 서버가 아래에 적힌 데이터를 받습니다.</li>
+      <li><strong>계층 2 — 계정/relay/활성화 계층 (수집 있음)</strong>: 개발자가 운영하는 <code>auth.ugot.uk</code>와 <code>pay.ugot.uk</code> 서버가 아래에 적힌 데이터를 받습니다.</li>
     </ul>
 
     <h3>계층 1 — P2P 콘텐츠: 우리가 받지 않는 것</h3>
@@ -84,8 +84,8 @@
       <li><strong>관계·활동</strong> — 팔로잉·팔로워 목록과 "함께한 시간"은 전적으로 당신의 기기에만 저장되며 어디에도 업로드되지 않습니다. 팔로우 사실은 서버 집계 없이, 서명된 P2P 세션으로 상대 기기에만 전달됩니다.</li>
     </ul>
 
-    <h3>계층 2 — 선택적 계정/relay 계층: 우리가 받는 것</h3>
-    <p>개발자가 운영하는 서버는 <strong><code>https://auth.ugot.uk</code></strong> 하나이며, 아래 여섯 가지 경우에만 데이터를 받습니다.</p>
+    <h3>계층 2 — 계정/relay/활성화 계층: 우리가 받는 것</h3>
+    <p>개발자가 운영하는 <strong><code>https://auth.ugot.uk</code></strong>와 <strong><code>https://pay.ugot.uk</code></strong>가 아래 일곱 가지 경우에만 데이터를 받습니다.</p>
     <ol class="num">
       <li><strong>Google 로그인(선택)</strong> — @핸들을 쓰려고 Google 로그인을 하면, 앱이 Google ID 토큰을 <code>auth.ugot.uk</code>로 보내 Q Presence 토큰으로 교환합니다. 요청 스코프는 <code>openid profile email offline_access</code>이며, 이때 <strong>이메일 주소·이름·프로필 사진 URL</strong>이 서버 계정 레코드로 저장됩니다. 로그인하지 않으면 이 항목은 전혀 발생하지 않습니다.</li>
       <li><strong>pnp 공개키 ↔ @핸들 매핑</strong> — 로그인 후 <code>POST /api/auth/pubkey</code>로 당신의 <strong>pnp 공개키(<code>pnp:</code> URI)와 @핸들의 연결</strong>이 서버에 저장됩니다. 이 매핑은 만료 기간 없이 보관되며, <strong>누구나 인증 없이</strong> <code>GET /api/auth/username-by-pubkey</code>로 공개키에서 @핸들을 역조회할 수 있습니다(그것이 이 기능의 목적입니다). 즉 로그인하는 순간 당신의 가명 pnp 신원과 Google 계정 기반 @핸들이 공개적으로 연결됩니다.</li>
@@ -93,6 +93,7 @@
       <li><strong>relay 깨우기 대상 식별자</strong> — 대화(DM)를 보낼 때마다 앱이 <code>POST /api/relay/wake</code>로 <strong>상대의 pnp URI와 종류 값(<code>dm</code>)</strong>을 서버에 보냅니다. 이 호출은 <strong>로그인 여부와 무관하게, 상대가 relay에 등록돼 있는지와 무관하게</strong> 발생합니다. 서버는 상대가 등록된 iOS 사용자일 때 <strong>내용이 전혀 없는</strong> APNs 푸시로 상대 앱을 깨울 뿐이며, <strong>메시지 내용은 절대 서버로 전송되지 않습니다</strong> — 깨어난 앱이 당신과 직접 P2P로 연결해 내용을 받습니다. 서버는 대상 식별자나 wake 이력을 저장하지 않고, 남용(푸시 폭탄) 방지를 위해 발신 IP의 SHA-256 해시 앞 8바이트만 <strong>5분 창 카운터</strong>로 사용합니다(원문 IP는 저장·로그하지 않습니다).</li>
       <li><strong>핸들 역조회 시의 접속 정보</strong> — 피드에서 다른 사람의 @핸들을 표시하기 위해 앱이 그 사람의 <strong>pnp 공개키</strong>를 조회 요청에 담아 보냅니다. 모든 HTTPS 요청과 마찬가지로 이때 <strong>당신의 IP 주소</strong>가 서버에 도달합니다.</li>
       <li><strong>구독 결제</strong> — Q Presence+ 구독 결제 자체는 <strong>Apple App Store 또는 Google Play</strong>가 처리하며, 카드·결제 수단 정보는 우리에게 오지 않습니다. iOS에서 relay 구독 게이팅이 활성화된 경우에 한해, StoreKit 트랜잭션 증명(JWS — 상품 ID·구매/만료 시각 등 <strong>구매 이력</strong>)이 <code>auth.ugot.uk</code>로 전송되어 검증되고 당신의 계정에 결속됩니다.</li>
+      <li><strong>Android 활성화 계측</strong> — Android 앱은 제품 개선을 위해 무작위 <strong>설치 UUID</strong>와 단계 이름(첫 실행·온보딩 완료·온에어·다른 사용자 발견·기억하기), 플랫폼, 로그인 여부만 <code>pay.ugot.uk</code>로 보냅니다. pnp URI·계정 키·콘텐츠·상대 식별자·사람 수는 보내지 않으며, 설치 UUID는 계정이나 광고 ID와 연결하지 않습니다.</li>
     </ol>
 
     <h3>보관 기간</h3>
@@ -106,6 +107,7 @@
           <tr><td>relay 소유자 기록(@핸들)</td><td>365일(재등록 때마다 갱신)</td></tr>
           <tr><td>wake 남용 방지 카운터(IP 해시)</td><td>5분</td></tr>
           <tr><td>wake 대상 식별자·메시지 내용</td><td>저장하지 않음</td></tr>
+          <tr><td>Android 설치 UUID·활성화 단계</td><td>제품 퍼널 집계에 필요한 기간(현재 자동 만료 기간 없음). 앱 삭제 후에는 새 이벤트가 발생하지 않음</td></tr>
         </tbody>
       </table>
     </div>
@@ -116,15 +118,17 @@
       <li><strong>북마크</strong> — 당신이 저장 버튼을 눌러 명시적으로 보관한 포스트의 사본. 당신의 기기에만 저장되며 저자에게 통지되지 않고, 어디에도 업로드되지 않습니다.</li>
       <li><strong>차단 목록</strong> — 전적으로 기기에만 저장되며 차단당한 사람에게 통지되지 않습니다.</li>
       <li><strong>미디어 캐시</strong> — 재방문 시 대역폭을 아끼기 위한 임시 캐시로, 앱 메모리(RAM)에만 있고 앱을 종료하면 사라집니다.</li>
+      <li><strong>품은 글 보관소</strong> — 읽은 다른 사람의 글과 답글이 앱 전용 디스크에 최대 200MB까지 저장될 수 있습니다. 클라우드 백업에서 제외되고 앱을 삭제하면 사라지며, 각 글의 더보기에서 <strong>[안 품기]</strong>를 선택할 수 있습니다.</li>
     </ul>
 
     <h3>제3자 인프라</h3>
     <ul>
       <li><strong>P2P 디스커버리/릴레이(number0의 iroh 공개 인프라)</strong> — 기기끼리 서로를 찾고 방화벽(NAT)을 통과하기 위해 iroh 공개 릴레이·디스커버리 노드를 경유할 수 있습니다. 이 과정에서 <strong>당신의 노드 ID와 접속 주소(IP)</strong>가 해당 인프라에 노출됩니다. 이 노드들은 <strong>암호문만</strong> 중계하며 내용을 볼 수 없습니다. 이는 개발자 서버가 아닌 제3자 인프라입니다.</li>
       <li><strong>개발자 운영 깨우기 relay(<code>auth.ugot.uk</code>)</strong> — 위 계층 2에 적힌 계정·APNs·wake 기능을 담당하는 <strong>개발자 자체 서버</strong>입니다. 위 iroh 릴레이와는 별개이며, 메시지 내용은 이 서버를 지나가지 않습니다.</li>
+      <li><strong>개발자 운영 활성화 계측(<code>pay.ugot.uk</code>)</strong> — Android의 익명 설치 UUID와 위 다섯 단계만 받습니다. pnp 신원이나 콘텐츠는 받지 않습니다.</li>
       <li><strong>Google 로그인</strong> — 선택적 로그인에 Google Credential Manager(Android) / Google Sign-In(iOS)을 사용합니다. Google의 개인정보 처리에는 Google 정책이 적용됩니다.</li>
       <li><strong>결제</strong> — Apple App Store / Google Play가 결제를 처리합니다.</li>
-      <li><strong>Google AdMob (광고)</strong> — 홈·발견·대화 <strong>목록</strong>에 네이티브 광고를 넣습니다. 1:1 대화·글 상세·프로필 헤더에는 없습니다. Q Presence+를 켜도 광고는 빼지 않습니다. Android는 <code>com.google.android.gms.permission.AD_ID</code>를 선언하고, Google Mobile Ads SDK가 <strong>광고 ID(AAID)</strong>와 광고 요청 맥락을 Google에 보내 게재·측정·사기를 막습니다. 글·사진·영상·대화 <strong>내용</strong>은 이 경로로 보내지 않습니다. 광고 ID는 기기 설정에서 재설정하거나 끌 수 있습니다(Android: 설정 → 개인정보 보호 → 광고). 우리 분석·크래시 SDK는 없습니다.</li>
+      <li><strong>Google AdMob (광고)</strong> — 홈·발견·대화 <strong>목록</strong>에 네이티브 광고를 넣으며 첫 광고는 여섯 번째 글 뒤에 나옵니다. 1:1 대화·글 상세·프로필 헤더에는 없습니다. Android는 매 실행 Google UMP로 동의 상태를 확인하고 광고 요청이 허용된 뒤에만 Mobile Ads SDK를 시작합니다. 지역상 필요한 경우 동의 폼과 설정의 <strong>[광고 개인정보 선택]</strong>을 제공합니다. 앱은 <code>com.google.android.gms.permission.AD_ID</code>를 선언하고, 허용된 범위에서 Google Mobile Ads SDK가 <strong>광고 ID(AAID)</strong>와 광고 요청 맥락을 Google에 보내 게재·측정·사기를 막습니다. 글·사진·영상·대화 <strong>내용</strong>은 이 경로로 보내지 않습니다. 자체 크래시 SDK나 제3자 분석 SDK는 넣지 않습니다.</li>
       <li><strong>Google Play 서비스 구성요소</strong> — Google 로그인(Credential Manager)과 AdMob 때문에 Play 서비스가 앱에 포함됩니다(릴리스 병합 매니페스트의 <code>com.google.android.datatransport.runtime.*</code> 등). 그 구성요소의 자체 진단·전송은 Google 정책이 적용됩니다.</li>
     </ul>
 
@@ -137,7 +141,7 @@
     <h3>계정 삭제 / 데이터 삭제 요청</h3>
     <ul>
       <li><strong>기기 데이터</strong> — 앱을 삭제하면 당신의 pnp 계정 키와 모든 로컬 데이터가 기기에서 사라집니다. 백업해둔 24단어 니모닉이 없으면 pnp 계정은 영구히 복구 불가능합니다.</li>
-      <li><strong>한 번도 로그인하지 않았다면</strong> — 서버에 삭제할 데이터가 존재하지 않으며, 앱에 [계정 삭제] 메뉴도 나타나지 않습니다(로그인 상태에서만 노출).</li>
+      <li><strong>한 번도 로그인하지 않았다면</strong> — 계정·핸들·relay 데이터는 존재하지 않습니다. Android 활성화 이벤트는 계정이나 pnp 신원과 연결되지 않은 설치 UUID로만 남을 수 있습니다.</li>
       <li><strong>로그인한 적이 있다면</strong>, 아래 세 가지 방법 중 하나로 계정 계층 데이터를 삭제할 수 있습니다.
         <ol class="num">
           <li><strong>앱 내에서</strong> — <strong>iOS</strong>는 <strong>나</strong> 탭 → 우측 상단 <strong>⚙</strong> 메뉴 → 계정 섹션의 [계정 삭제], <strong>Android</strong>는 <strong>나</strong> 탭 화면 안 계정 영역의 [계정 삭제]입니다. 앱이 <code>DELETE /api/auth/pubkey</code>로 pnp 공개키 ↔ @핸들 매핑을 해제하고 로그아웃합니다. iOS에 등록된 APNs 기기 토큰이 있으면 <code>DELETE /api/relay/register</code>로 같은 흐름에서 삭제됩니다. 계정 레코드 삭제는 아래 2·3번으로 요청해 주세요.</li>
@@ -159,7 +163,7 @@
     <p class="lede">Q Presence is a presence-based social network with <strong>no central server for content</strong>. However, the app has two layers with entirely different properties, and in the second layer the developer's server does receive some data. This document draws that line precisely.</p>
     <ul>
       <li><strong>Layer 1 — P2P content layer (no server)</strong>: posts, photos, videos, chats, follows. Never passes through a developer server.</li>
-      <li><strong>Layer 2 — optional account / relay layer (collection happens)</strong>: the developer-operated server <code>auth.ugot.uk</code> receives the data listed below.</li>
+      <li><strong>Layer 2 — account / relay / activation layer (collection happens)</strong>: the developer-operated servers <code>auth.ugot.uk</code> and <code>pay.ugot.uk</code> receive the data listed below.</li>
     </ul>
 
     <h3>Layer 1 — P2P content: what we never receive</h3>
@@ -169,8 +173,8 @@
       <li><strong>Relationships / activity</strong> — Your following/follower lists and "time together" are stored solely on your device and never uploaded. A follow is delivered only to the other person's device over a signed P2P session — no server tally exists.</li>
     </ul>
 
-    <h3>Layer 2 — optional account / relay layer: what we receive</h3>
-    <p>The developer operates exactly one server, <strong><code>https://auth.ugot.uk</code></strong>, and it receives data only in the six cases below.</p>
+    <h3>Layer 2 — account / relay / activation layer: what we receive</h3>
+    <p>The developer operates <strong><code>https://auth.ugot.uk</code></strong> and <strong><code>https://pay.ugot.uk</code></strong>, which receive data only in the seven cases below.</p>
     <ol class="num">
       <li><strong>Google sign-in (optional)</strong> — If you sign in with Google to claim an @handle, the app sends your Google ID token to <code>auth.ugot.uk</code> to exchange it for a Q Presence token. The requested scopes are <code>openid profile email offline_access</code>, and your <strong>email address, name, and profile picture URL</strong> are stored in a server account record. None of this happens if you never sign in.</li>
       <li><strong>pnp public key ↔ @handle mapping</strong> — After sign-in, <code>POST /api/auth/pubkey</code> stores the link between your <strong>pnp public key (<code>pnp:</code> URI) and your @handle</strong> on the server. This mapping is kept with no expiry, and <strong>anyone, without authentication</strong>, can reverse-look-up a handle from a public key via <code>GET /api/auth/username-by-pubkey</code> (that is the point of the feature). In other words, signing in publicly links your pseudonymous pnp identity to your Google-backed @handle.</li>
@@ -178,6 +182,7 @@
       <li><strong>Relay wake target identifier</strong> — Every time you send a direct message, the app sends the <strong>recipient's pnp URI and a kind value (<code>dm</code>)</strong> to <code>POST /api/relay/wake</code>. This call happens <strong>regardless of whether you are signed in</strong> and regardless of whether the recipient is registered. When the recipient is a registered iOS user, the server sends a <strong>contentless</strong> APNs push to wake their app; <strong>message content is never sent to the server</strong> — the woken app connects to you directly over P2P to receive it. The server does not store target identifiers or wake history; for abuse (push-bomb) protection it uses only the first 8 bytes of a SHA-256 hash of the sender IP as a <strong>5-minute window counter</strong> (raw IPs are neither stored nor logged).</li>
       <li><strong>Connection metadata during handle lookups</strong> — To show other people's @handles in your feed, the app sends <strong>their pnp public key</strong> in a lookup request. As with any HTTPS request, <strong>your IP address</strong> reaches the server.</li>
       <li><strong>Subscription payments</strong> — Q Presence+ payments are processed by <strong>Apple's App Store or Google Play</strong>; card and payment-instrument details never reach us. Only when relay subscription gating is enabled on iOS, a StoreKit transaction proof (a JWS containing <strong>purchase history</strong> such as product ID and purchase/expiry timestamps) is sent to <code>auth.ugot.uk</code> for verification and bound to your account.</li>
+      <li><strong>Android activation measurement</strong> — To improve the product, the Android app sends a random <strong>installation UUID</strong> plus only the stage name (first open, onboarding complete, on-air, peer discovered, or person remembered), platform, and sign-in state to <code>pay.ugot.uk</code>. It does not send a pnp URI, account key, content, peer identifier, or people count. The installation UUID is not linked to an account or advertising ID.</li>
     </ol>
 
     <h3>Retention</h3>
@@ -191,6 +196,7 @@
           <tr><td>Relay owner record (@handle)</td><td>365 days (refreshed on each re-registration)</td></tr>
           <tr><td>Wake abuse-protection counter (hashed IP)</td><td>5 minutes</td></tr>
           <tr><td>Wake target identifiers, message content</td><td>Not stored</td></tr>
+          <tr><td>Android installation UUID and activation stages</td><td>As long as needed for product-funnel analysis (no automatic expiry is currently configured). Uninstalling stops new events</td></tr>
         </tbody>
       </table>
     </div>
@@ -201,15 +207,17 @@
       <li><strong>Bookmarks</strong> — copies of posts you explicitly saved with the bookmark button. Kept only on your device, never uploaded, and the author is not notified.</li>
       <li><strong>Block list</strong> — kept solely on your device; blocked people are not notified.</li>
       <li><strong>Media cache</strong> — a temporary in-memory (RAM) cache to save bandwidth on revisits; cleared when the app closes.</li>
+      <li><strong>Held-posts store</strong> — posts and replies you read may be stored in app-private disk space up to 200 MB. It is excluded from cloud backup, removed when the app is deleted, and each post menu provides <strong>Stop holding</strong>.</li>
     </ul>
 
     <h3>Third-party infrastructure</h3>
     <ul>
       <li><strong>P2P discovery / relay (number0's public iroh infrastructure)</strong> — Devices may route through public iroh relay and discovery nodes to find each other and traverse NAT. In doing so, <strong>your node ID and connection address (IP)</strong> are exposed to that infrastructure. These nodes relay <strong>ciphertext only</strong> and cannot read content. This is third-party infrastructure, not a developer server.</li>
       <li><strong>Developer-operated wake relay (<code>auth.ugot.uk</code>)</strong> — the <strong>developer's own server</strong> handling the account, APNs, and wake functions described in Layer 2. It is separate from the iroh relays above, and message content never passes through it.</li>
+      <li><strong>Developer-operated activation measurement (<code>pay.ugot.uk</code>)</strong> — receives only Android's anonymous installation UUID and the five activation stages listed above. It receives no pnp identity or content.</li>
       <li><strong>Google sign-in</strong> — optional sign-in uses Google Credential Manager (Android) / Google Sign-In (iOS). Google's own privacy policy governs Google's processing.</li>
       <li><strong>Payments</strong> — handled by the Apple App Store / Google Play.</li>
-      <li><strong>Google AdMob (ads)</strong> — Native ads appear in the Home, Discover, and Chats <strong>lists</strong>. They do not appear in 1:1 threads, post detail, or the profile header. Q Presence+ does not remove ads. On Android the app declares <code>com.google.android.gms.permission.AD_ID</code>. The Google Mobile Ads SDK sends the <strong>advertising ID (AAID)</strong> and ad-request context to Google for serving, measurement, and fraud prevention. Post, photo, video, and chat <strong>content</strong> is not sent on this path. You can reset or opt out of the advertising ID in system settings (Android: Settings → Privacy → Ads). We do not ship our own analytics or crash SDK.</li>
+      <li><strong>Google AdMob (ads)</strong> — Native ads appear in the Home, Discover, and Chats <strong>lists</strong>, beginning after the sixth post. They do not appear in 1:1 threads, post detail, or the profile header. On every Android launch, Google UMP refreshes consent state; the Mobile Ads SDK starts only after UMP says ads may be requested. Where required, the app presents a consent form and an <strong>Ad privacy choices</strong> entry in Settings. The app declares <code>com.google.android.gms.permission.AD_ID</code>, and within the permitted scope the Google Mobile Ads SDK sends the <strong>advertising ID (AAID)</strong> and ad-request context to Google for serving, measurement, and fraud prevention. Post, photo, video, and chat <strong>content</strong> is not sent on this path. We ship no third-party analytics SDK or custom crash SDK.</li>
       <li><strong>Google Play services components</strong> — Google sign-in (Credential Manager) and AdMob pull in Play services (e.g. <code>com.google.android.datatransport.runtime.*</code> in the release merged manifest). Google's policy governs those components' own diagnostics/transport.</li>
     </ul>
 
@@ -222,7 +230,7 @@
     <h3>Account deletion / data deletion requests</h3>
     <ul>
       <li><strong>Device data</strong> — Uninstalling the app removes your pnp account key and all local data from the device. Without your backed-up 24-word mnemonic, the pnp account is permanently unrecoverable.</li>
-      <li><strong>If you never signed in</strong> — there is no server-side data to delete, and the app shows no [Delete account] item at all (it appears only while signed in).</li>
+      <li><strong>If you never signed in</strong> — there is no account, handle, or relay data. Android activation events may remain only under an installation UUID that is not linked to an account or pnp identity.</li>
       <li><strong>If you have signed in</strong>, you can delete the account-layer data in any of three ways:
         <ol class="num">
           <li><strong>In the app</strong> — on <strong>iOS</strong>: the <strong>Me</strong> tab → the <strong>⚙</strong> menu at the top right → [Delete account] in the Account section; on <strong>Android</strong>: [Delete account] in the account area of the <strong>Me</strong> tab screen itself. The app calls <code>DELETE /api/auth/pubkey</code> to unbind the pnp public key ↔ @handle mapping and signs you out. If an APNs device token is registered on iOS, it is deleted in the same flow via <code>DELETE /api/relay/register</code>. To delete the account record, use option 2 or 3 below.</li>

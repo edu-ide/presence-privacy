@@ -57,7 +57,7 @@
 <main>
   <header>
     <div class="brand"><span class="dot"></span><h1>Q Presence</h1></div>
-    <div class="updated">계정 삭제 · Delete your account — 최종 업데이트 / Last updated: 2026-07-25</div>
+    <div class="updated">계정 삭제 · Delete your account — 최종 업데이트 / Last updated: 2026-08-23</div>
     <nav>
       <a href="#ko">한국어</a>
       <a href="#en">English</a>
@@ -67,13 +67,13 @@
 
   <section id="ko">
     <h2>한국어</h2>
-    <p class="lede">Q Presence(앱 ID <code>app.pnp.presence</code>)의 계정과 서버에 저장된 데이터를 삭제하는 방법입니다. Q Presence는 <strong>선택적</strong> Google 로그인만 서버(<code>auth.ugot.uk</code>)를 사용하며, 글·사진·영상·대화 같은 콘텐츠는 애초에 서버를 거치지 않습니다.</p>
+    <p class="lede">Q Presence(앱 ID <code>app.pnp.presence</code>)의 계정과 서버에 저장된 데이터를 삭제하는 방법입니다. 선택적 계정 기능은 <code>auth.ugot.uk</code>를 사용하고, Android 활성화 계측은 <code>pay.ugot.uk</code>를 사용합니다. 글·사진·영상·대화 내용은 개발자 서버를 거치지 않습니다.</p>
 
     <h3>한 번도 로그인한 적이 없다면</h3>
-    <p class="zero"><strong>삭제할 데이터가 서버에 존재하지 않습니다.</strong> Google 로그인을 하지 않고 쓴 경우 계정은 기기에서 만들어진 pnp 키뿐이며, 서버에 어떤 계정 레코드도 생기지 않습니다. 앱을 삭제하면 그대로 끝납니다.</p>
+    <p class="zero"><strong>삭제할 계정·핸들·relay 데이터는 없습니다.</strong> Google 로그인을 하지 않으면 계정 레코드는 생기지 않습니다. 다만 Android의 익명 활성화 이벤트는 계정이나 pnp 신원과 연결되지 않은 설치 UUID로 남을 수 있으며, 앱을 삭제하면 새 이벤트 전송이 멈춥니다.</p>
 
     <h3>방법 1 — 앱 안에서 삭제</h3>
-    <p><strong>[계정 삭제]는 로그인한 상태에서만 나타납니다.</strong> Google 로그인을 한 번도 하지 않았다면 앱에 이 메뉴 자체가 없으며, 서버에도 지울 데이터가 없습니다(위 항목 참고). 삭제 경로는 iOS와 Android가 다릅니다.</p>
+    <p><strong>[계정 삭제]는 로그인한 상태에서만 나타납니다.</strong> Google 로그인을 한 번도 하지 않았다면 앱에 이 메뉴 자체가 없습니다. 삭제 경로는 iOS와 Android가 다릅니다.</p>
 
     <p><strong>iOS</strong></p>
     <ol class="steps">
@@ -104,8 +104,9 @@
     <h3>삭제되지 않는 것과 그 이유</h3>
     <ul>
       <li><strong>기기의 pnp 계정 키(로컬)</strong> — 기기 보안 저장소(Android Keystore / iOS Keychain)에만 있고 서버가 가지고 있지 않아, 서버에서 지울 수 없습니다. <strong>앱을 삭제하면</strong> 이 키와 모든 로컬 데이터가 기기에서 사라집니다. 백업해둔 24단어 니모닉이 없으면 pnp 계정은 영구히 복구 불가능합니다.</li>
-      <li><strong>콘텐츠(글·사진·영상·대화)</strong> — 삭제 대상이 아닙니다. 애초에 서버에 저장된 적이 없기 때문입니다. 콘텐츠는 온에어인 동안 기기에서 기기로 종단간 암호화(P2P) 전달되며 세션이 끝나면 사라집니다.</li>
-      <li><strong>상대 기기에 남은 것</strong> — 상대가 저장 버튼으로 명시적으로 보관한 북마크는 그 사람의 기기 파일에만 있습니다. 서버가 관여하지 않으므로 우리가 지울 수 없습니다.</li>
+      <li><strong>Android 익명 활성화 이벤트</strong> — 계정이나 pnp 신원과 연결되지 않은 설치 UUID와 단계만 남을 수 있어 계정 삭제 요청으로 특정할 수 없습니다. 현재 자동 만료 기간은 없으며 앱 삭제 후 새 이벤트는 발생하지 않습니다.</li>
+      <li><strong>콘텐츠(글·사진·영상·대화)</strong> — 개발자 서버에 저장된 적이 없어 서버 삭제 대상이 아닙니다. 콘텐츠는 P2P로 전달되며, 읽은 글의 사본은 다른 사람의 앱 전용 기기 저장소에 남을 수 있습니다.</li>
+      <li><strong>상대 기기에 남은 것</strong> — 상대가 읽어 자동으로 품은 글이나 명시적으로 저장한 북마크는 그 사람의 기기 파일에만 있습니다. 서버가 관여하지 않으므로 우리가 지울 수 없습니다. 각 사용자는 해당 글의 더보기에서 [안 품기]를 선택할 수 있습니다.</li>
     </ul>
 
     <h3>처리 기간</h3>
@@ -119,13 +120,13 @@
 
   <section id="en" lang="en">
     <h2>English</h2>
-    <p class="lede">How to delete your Q Presence account (app ID <code>app.pnp.presence</code>) and the data stored on our server. Q Presence uses a server (<code>auth.ugot.uk</code>) only for <strong>optional</strong> Google sign-in; content such as posts, photos, videos, and chats never passes through a server at all.</p>
+    <p class="lede">How to delete your Q Presence account (app ID <code>app.pnp.presence</code>) and data stored on our servers. Optional account features use <code>auth.ugot.uk</code>, and Android activation measurement uses <code>pay.ugot.uk</code>. Post, photo, video, and chat content never passes through a developer server.</p>
 
     <h3>If you never signed in</h3>
-    <p class="zero"><strong>There is no server-side data to delete.</strong> Without Google sign-in, your account is just the pnp key generated on your device, and no account record is ever created on the server. Uninstalling the app is all there is.</p>
+    <p class="zero"><strong>There is no account, handle, or relay data to delete.</strong> Without Google sign-in, no account record is created. Anonymous Android activation events may remain only under an installation UUID that is not linked to an account or pnp identity; uninstalling stops new events.</p>
 
     <h3>Option 1 — Delete in the app</h3>
-    <p><strong>[Delete account] appears only while you are signed in.</strong> If you have never signed in with Google, the app shows no such menu item at all — and there is no server-side data to delete either (see above). The path differs between iOS and Android.</p>
+    <p><strong>[Delete account] appears only while you are signed in.</strong> If you have never signed in with Google, the app shows no such menu item. The path differs between iOS and Android.</p>
 
     <p><strong>iOS</strong></p>
     <ol class="steps">
@@ -156,8 +157,9 @@
     <h3>What is not deleted, and why</h3>
     <ul>
       <li><strong>The pnp account key on your device (local)</strong> — it lives only in your device's secure storage (Android Keystore / iOS Keychain) and the server never has it, so it cannot be deleted server-side. <strong>Uninstalling the app</strong> removes that key and all local data from the device. Without your backed-up 24-word mnemonic, the pnp account is permanently unrecoverable.</li>
-      <li><strong>Content (posts, photos, videos, messages)</strong> — nothing to delete: it was never stored on a server. Content is delivered end-to-end encrypted device-to-device (P2P) while you are on-air and disappears when the session ends.</li>
-      <li><strong>Copies on other people's devices</strong> — a post someone explicitly saved with the bookmark button is kept only in that person's device files. No server is involved, so we cannot remove it.</li>
+      <li><strong>Anonymous Android activation events</strong> — only an installation UUID and stage may remain, without a link to an account or pnp identity, so an account deletion request cannot identify them. No automatic expiry is currently configured; uninstalling stops new events.</li>
+      <li><strong>Content (posts, photos, videos, messages)</strong> — it was never stored on a developer server, so there is no server copy to delete. Content travels over P2P, and copies of posts someone read may remain in that person's app-private device storage.</li>
+      <li><strong>Copies on other people's devices</strong> — posts automatically held after reading, or explicitly saved as bookmarks, exist only in that person's device files. No server is involved, so we cannot remove them. Each user can choose <strong>Stop holding</strong> from that post's menu.</li>
     </ul>
 
     <h3>Processing time</h3>
